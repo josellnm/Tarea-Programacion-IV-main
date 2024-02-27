@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="user.jpg" type="image/x-icon">
+    <title>Registro de Alumnos</title>
+ 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <style>
+        body {
+             background-color: rgb(228, 209, 185);
+
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div id="app">
+            <div class="row">
+                <div class="col"> SISTEMA DE REGISTRO DE ALUMNOS </div>
+            </div>
+            <div class="row">
+                <div class="col col-md-6">
+                    <div class="row p-1">
+                        <div class="col col-md-2">CODIGO</div>
+                        <div class="col col-md-3">
+                            <input v-model="alumno.codigo" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row p-1">
+                        <div class="col col-md-2">NOMBRE</div>
+                        <div class="col col-md-5">
+                            <input v-model="alumno.nombre" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row p-1">
+                        <div class="col col-md-2">DIRECCION</div>
+                        <div class="col col-md-5">
+                            <input v-model="alumno.direccion" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row p-1">
+                        <div class="col col-md-2">MUNICIPIO</div>
+                        <div class="col col-md-3">
+                            <input v-model="alumno.municipio" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row p-1">
+                        <div class="col col-md-2">DEPARTAMENTO</div>
+                        <div class="col col-md-3">
+                            <input v-model="alumno.departamento" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row p-1">
+                        <div class="col col-md-2">TELEFONO</div>
+                        <div class="col col-md-3">
+                            <input v-model="alumno.telefono" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row p-1">
+                        <div class="col col-md-2">EDAD</div>
+                        <div class="col col-md-3">
+                            <input v-model="alumno.edad" type="number" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row p-1">
+                        <div class="col col-md-2">SEXO</div>
+                        <div class="col col-md-3">
+                            <input v-model="alumno.sexo" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row p-1">
+                        <div class="col col-md-2">FECHA</div>
+                        <div class="col col-md-3">
+                            <input v-model="alumno.fecha" type="number" class="form-control">
+                        </div>
+                    </div>
+ 
+                    <div class="row p-1">
+                        <div class="col">
+                            <button @click.prevent="guardarAlumno" class="btn btn-success">GUARDAR</button>
+                            <button @click.prevent="nuevoAlumno" class="btn btn-warning">NUEVO</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col col-md-5.2 ms-md-auto mt-md-3 float-left">
+                    <form id="frmAlumno">
+                        <table class="table ">
+                            <thead>
+                                <tr>
+                                    <th>BUSCAR</th>
+                                    <th colspan="9">
+                                        <input placeholder="codigo, nombre, direccion, municipio, departamento, telefono, edad, sexo, fecha" type="search" v-model="valor" @keyup="buscarAlumnos" class="form-control">
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>CODIGO</th>
+                                    <th>NOMBRE</th>
+                                    <th>DIRECCION</th>
+                                    <th>MUNICIPIO</th>
+                                    <th>DEPARTAMENTO</th>
+                                    <th>TELEFONO</th>
+                                    <th>EDAD</th>
+                                    <th>SEXO</th>
+                                    <th>FECHA</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr @click="modificarAlumno(alumno)" v-for="alumno in alumnos" :key="alumno.idAlumno">
+                                    <td>{{alumno.codigo}}</td>
+                                    <td>{{alumno.nombre}}</td>
+                                    <td>{{alumno.direccion}}</td>
+                                    <td>{{alumno.municipio}}</td>
+                                    <td>{{alumno.departamento}}</td>
+                                    <td>{{alumno.telefono}}</td>
+                                    <td>{{alumno.edad}}</td>
+                                    <td>{{alumno.sexo}}</td>
+                                    <td>{{alumno.fecha}}</td>
+                                    <td><button @click.prevent="eliminarAlumnos(alumno.idAlumno)" class="btn btn-danger">ELIMINAR</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                valor: '',
+                alumnos: [],
+                accion: 'nuevo',
+                alumno: {
+                    idAlumno: new Date().getTime(),
+                    codigo: '',
+                    nombre: '',
+                    direccion: '',
+                    municipio: '',
+                    departamento: '',
+                    telefono: '',
+                    edad: '',
+                    sexo: '',
+                    fecha: ''
+                }
+            },
+            methods: {
+                buscarAlumnos(e) {
+                    if (e.keyCode == 8 || this.valor === '') {
+                        this.listarAlumnos();
+                    }
+                    this.alumnos = this.alumnos.filter(alumno =>
+                        alumno.codigo.includes(this.valor) ||
+                        alumno.nombre.toLowerCase().includes(this.valor.toLowerCase()) ||
+                        alumno.direccion.toLowerCase().includes(this.valor.toLowerCase()) ||
+                        alumno.municipio.toLowerCase().includes(this.valor.toLowerCase()) ||
+                        alumno.departamento.toLowerCase().includes(this.valor.toLowerCase()) ||
+                        alumno.telefono.toString().toLowerCase().includes(this.valor.toLowerCase()) ||
+                        alumno.edad.toString().toLowerCase().includes(this.valor.toLowerCase()) ||
+                        alumno.sexo.toLowerCase().includes(this.valor.toLowerCase()) ||
+                        alumno.fecha.toString().toLowerCase().includes(this.valor.toLowerCase())
+                    );
+                },
+                eliminarAlumnos(idAlumno) {
+                    if (confirm(`Esta seguro de elimina el alumno?`)) {
+                        let buscar = this.alumnos.findIndex(alumno => alumno.idAlumno == idAlumno);
+                        this.alumnos.splice(buscar, 1);
+                        localStorage.setItem('alumnos', JSON.stringify(this.alumnos));
+                    }
+                },
+                modificarAlumno(alumno) {
+                    this.accion = 'modificar';
+                    this.alumno = Object.assign({}, alumno); // Crear una copia del objeto alumno
+                },
+                guardarAlumno() {
+                    //almacenamiento del objeto alumno en localStorage
+                    if (this.alumnos.some(alumno => alumno.codigo.trim() === this.alumno.codigo && alumno.idAlumno !== this.alumno.idAlumno)) {
+                        alert('El código ya existe. Por favor, ingrese un código diferente.');
+                    return;
+                    }
+
+                    if (this.accion == 'nuevo') {
+                        this.alumnos.push(this.alumno);
+                    } else if (this.accion == "modificar") {
+                        let buscar = this.alumnos.findIndex(alumno => alumno.idAlumno == this.alumno.idAlumno);
+                        this.alumnos[buscar] = Object.assign({}, this.alumno); // Crear una copia del objeto alumno
+                    }
+                    localStorage.setItem('alumnos', JSON.stringify(this.alumnos));
+                    this.nuevoAlumno();
+                },
+                nuevoAlumno() {
+                    this.accion = 'nuevo';
+                    this.alumno = {
+                        idAlumno: new Date().getTime(),
+                        codigo: '',
+                        nombre: '',
+                        direccion: '',
+                        municipio: '',
+                        departamento: '',
+                        telefono: '',
+                        edad: '',
+                        sexo: '',
+                        fecha: ''
+                    };
+                },
+                listarAlumnos() {
+                    this.alumnos = JSON.parse(localStorage.getItem('alumnos') || "[]");
+                }
+            },
+            created() {
+                this.listarAlumnos();
+            }
+        })
+    </script>
+</body>
+ 
+</html>
