@@ -1,0 +1,21 @@
+.navbar-expand-lg {
+    background-color: #486fdd; 
+}
+.navbar-nav a {
+    color: #ffffff; 
+    font-weight: bold;
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+    transition: color 0.3s;
+}
+.navbar-nav a:hover {
+color: #433199; 
+}
+.navbar-nav a {
+    color: #ffffff; 
+    font-weight: bold;
+}
+.container-fluid a {
+    color: #ffffff; 
+    font-weight: bold;
+}

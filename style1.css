@@ -1,0 +1,15 @@
+.card.text-bg .card-header{
+    background-color: #486fdd;
+    color: #fff;
+    border-bottom: 1px solid #ddd;
+}
+
+.card.text-bg .card-body {
+    padding: 20px;
+}
+
+.card .card-header{
+    background-color: #4d82bc;
+    color: #fff;
+    border-bottom: 1px solid #ddd;
+}
